@@ -3,16 +3,13 @@ import tensorflow as tf
 import pandas as pd
 from PIL import Image
 import numpy as np
-import os
 
-# Set page configuration
 st.set_page_config(
     page_title="Dog Breed Classifier",
     page_icon="🐶",
     layout="wide"
 )
 
-# Add custom CSS
 st.markdown("""
 <style>
     .main-header {
@@ -51,11 +48,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Header
 st.markdown("<h1 class='main-header'>🐶 Dog Breed Classifier</h1>", unsafe_allow_html=True)
 st.markdown("<p class='sub-header'>Upload a photo of a dog to identify its breed</p>", unsafe_allow_html=True)
 
-# Create two columns for layout
 col1, col2 = st.columns([1, 1])
 
 
@@ -78,7 +73,6 @@ def preprocess(img):
     return np.expand_dims(img_array, axis=0)
 
 
-# Display sample images
 with col1:
     st.markdown("<div class='upload-container'>", unsafe_allow_html=True)
     st.markdown("### Upload a dog image")
@@ -91,7 +85,6 @@ with col1:
         classify_btn = st.button("🔍 Identify Breed")
     st.markdown("</div>", unsafe_allow_html=True)
     
-    # Show some example breeds
     st.markdown("### Popular Dog Breeds")
     st.markdown("""
     - Labrador Retriever
@@ -103,7 +96,6 @@ with col1:
     - Siberian Husky
     """)
 
-# Display results
 with col2:
     if uploaded and classify_btn:
         st.markdown("<div class='result-container'>", unsafe_allow_html=True)
@@ -111,22 +103,18 @@ with col2:
             input_tensor = preprocess(image)
             preds = model.predict(input_tensor)[0]
             
-            # Get top 3 predictions
             top_indices = preds.argsort()[-3:][::-1]
             top_breeds = [class_names[i] for i in top_indices]
             top_confidences = [preds[i] * 100 for i in top_indices]
             
-            # Main prediction
             st.markdown(f"### 🏆 Predicted Breed: **{top_breeds[0]}**")
             st.markdown(f"<div class='confidence-meter'>Confidence: {top_confidences[0]:.1f}%</div>", unsafe_allow_html=True)
             st.progress(float(top_confidences[0]/100))
             
-            # Other possibilities
             st.markdown("### Other possibilities:")
             for i in range(1, 3):
                 st.markdown(f"- **{top_breeds[i]}** ({top_confidences[i]:.1f}% confidence)")
         
-        # Additional information
         st.markdown("""
         ### About this breed
         This prediction is based on visual patterns the AI has learned. For a definitive breed identification, 
@@ -153,7 +141,6 @@ with col2:
         """)
         st.markdown("</div>", unsafe_allow_html=True)
 
-# Footer
 st.markdown("---")
-st.markdown("#### Made with ❤️ using TensorFlow and Streamlit")
+st.markdown("#### Made with ❤️ using TensorFlow and Streamlit by Nishant Sapkota")
 st.markdown("© 2025 Dog Breed Classifier | For educational purposes only")
